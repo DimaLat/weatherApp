@@ -1,0 +1,26 @@
+<html>
+
+<head>
+</head>
+
+<body>
+    <div id="weather-card">
+
+        <h2>Today's Weather Forecast</h2>
+
+        <div class="weather-container">
+            <h1>{{ geoLocation.address }}, {{ geoLocation.point }}</h1>
+                Right now it is {{ weather_info.temperature }} by Celsius. Humidity is {{ weather_info.humidity}} and pressure is {{ weather_info.pressure}}
+            </p>
+        </div>
+    </div>
+    <br>
+
+    <footer>Made by: Dzmitry Latyshonak |
+        <a href="https://openweathermap.org/api">Thanks for the API</a>
+    </footer>
+
+
+</body>
+
+</html>

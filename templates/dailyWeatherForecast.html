@@ -1,0 +1,50 @@
+<html>
+
+<head>
+</head>
+
+<body>
+    <div id="weather-card">
+
+        <h2>Week Weather Forecast</h2>
+
+        <div class="weather-container">
+            <h2>{{ geoLocation.address }}, {{ geoLocation.point }}</h2>
+                <table>
+                    <thead>
+  <tr>
+    <td>Date (YYYY-MM-DD)</td>
+    <td>Average temperature</td>
+    <td>Average humidity</td>
+    <td>Average pressure</td>
+  </tr>
+      </thead>
+                    <tbody>
+
+          {% for weatherByDay in weatherByDayList %}
+              <tr>
+                  <td>{{ weatherByDay.dayDate }}</td>
+    <td>{{ weatherByDay.averageTemp }}</td>
+    <td>{{ weatherByDay.averageHumidity }}</td>
+    <td>{{ weatherByDay.averagePressure }}</td>
+          {% endfor %}
+       </tr>
+    </tbody>
+</table>
+            <h2>Average values for selected interval</h2>
+        <h3>Average temperature: {{ avgData.resultAvgTemp }} C</h3>
+        <h3>Average pressure: {{ avgData.resultAvgPressure }}</h3>
+        <h3>Average humidity: {{ avgData.resultAvgHumidity }}</h3>
+            </p>
+        </div>
+    </div>
+    <br>
+
+    <footer>Made by: Dzmitry Latyshonak |
+        <a href="https://openweathermap.org/api">Thanks for the API</a>
+    </footer>
+
+
+</body>
+
+</html>
