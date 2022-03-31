@@ -10,12 +10,13 @@ from getWeather import GetWeather
 from models import WeatherInfo
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://dima:dima@localhost/weatherAppDB'
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://dima:dima@localhost/weatherAppDB"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.secret_key = 'secret string'
+app.secret_key = "secret string"
 weatherApp = GetWeather()
 
 db = SQLAlchemy(app)
+
 
 class WeatherToDb(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -42,10 +43,12 @@ class WeatherToDb(db.Model):
         self.averagePressure = averagePressure
         self.averageHumidity = averageHumidity
 
+
 @app.route("/", methods=["GET"])
 def mainPage():
 
     return render_template("mainPage.html")
+
 
 @app.route("/saveWeatherDataToDB", methods=["POST"])
 def saveWeatherDataToDB():
@@ -57,11 +60,17 @@ def saveWeatherDataToDB():
         averageTemperature = result.get("averageTemperature")
         averagePressure = result.get("averagePressure")
         averageHumidity = result.get("averageHumidity")
-        weatherToDB = WeatherToDb(region=region, startDate=startDate,endDate=endDate, averageDaytimeTemperature=averageTemperature, averagePressure=averagePressure, averageHumidity=averageHumidity)
+        weatherToDB = WeatherToDb(
+            region=region,
+            startDate=startDate,
+            endDate=endDate,
+            averageDaytimeTemperature=averageTemperature,
+            averagePressure=averagePressure,
+            averageHumidity=averageHumidity,
+        )
         db.session.add(weatherToDB)
         db.session.commit()
     return render_template("mainPage.html")
-
 
 
 @app.route("/todayWeather", methods=["POST", "GET"])
@@ -141,8 +150,12 @@ def dailyWeatherForecast():
         "resultAvgPressure": round(resultAvgPressure / daysInterval, 2),
         "resultAvgHumidity": int(resultAvgHumidity / daysInterval),
         "region": geoLocation.address,
-        "startDate": datetime.fromisoformat(weatherByDayList[0].get("dayDate")),  # first day date
-        "endDate": datetime.fromisoformat(weatherByDayList[-1].get("dayDate")),  # last day date
+        "startDate": datetime.fromisoformat(
+            weatherByDayList[0].get("dayDate")
+        ),  # first day date
+        "endDate": datetime.fromisoformat(
+            weatherByDayList[-1].get("dayDate")
+        ),  # last day date
     }
     return render_template(
         "dailyWeatherForecast.html",
@@ -189,8 +202,8 @@ def pastWeatherForecast():
         "resultAvgPressure": round(resultAvgPressure / daysInterval, 2),
         "resultAvgHumidity": int(resultAvgHumidity / daysInterval),
         "region": geoLocation.address,
-        "startDate": datetime.fromtimestamp(weatherByDays[0].dt), # first day date
-        "endDate": datetime.fromtimestamp(weatherByDays[-1].dt), # last day date
+        "startDate": datetime.fromtimestamp(weatherByDays[0].dt),  # first day date
+        "endDate": datetime.fromtimestamp(weatherByDays[-1].dt),  # last day date
     }
     return render_template(
         "dailyWeatherForecast.html",
