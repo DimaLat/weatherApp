@@ -40,6 +40,20 @@
     </div>
     <br>
 
+    <form action = "http://localhost:5000/saveWeatherDataToDB" method = "POST">
+    <h1>Do you want to save this data to database?</h1>
+        <input type = "hidden" name = "region" value="{{ avgData.region }}" />
+        <input type = "hidden" name = "startDate" value="{{ avgData.startDate }}" />
+        <input type = "hidden" name = "endDate" value="{{ avgData.endDate }}" />
+        <input type = "hidden" name = "averageTemperature" value="{{ avgData.resultAvgTemp }}" />
+        <input type = "hidden" name = "averagePressure" value="{{ avgData.resultAvgPressure }}" />
+        <input type = "hidden" name = "averageHumidity" value="{{ avgData.resultAvgHumidity }}" />
+   <p><input type = "submit" value = "SAVE" /></p>
+</form>
+        <form action = "http://localhost:5000/" method = "GET">
+   <p><input type = "submit" value = "BACK" /></p>
+</form>
+
     <footer>Made by: Dzmitry Latyshonak |
         <a href="https://openweathermap.org/api">Thanks for the API</a>
     </footer>

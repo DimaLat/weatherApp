@@ -95,7 +95,9 @@ class DailyWeatherResponse:
 
             self.lat: int = objectDict.get("lat", 0)
             self.lon: int = objectDict.get("lon", 0)
-            self.daily: List[DailyWeatherInfo] = [DailyWeatherInfo(day) for day in objectDict.get("daily")]
+            self.daily: List[DailyWeatherInfo] = [
+                DailyWeatherInfo(day) for day in objectDict.get("daily")
+            ]
 
 
 class PastDailyWeatherInfo:
