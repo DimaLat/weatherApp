@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 from typing import List, Dict
 
@@ -10,9 +11,9 @@ from getWeather import GetWeather
 from models import WeatherInfo
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://dima:dima@localhost/weatherAppDB"
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.secret_key = "secret string"
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("SQLALCHEMY_DATABASE_URI", "")
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = os.getenv("SQLALCHEMY_TRACK_MODIFICATIONS", "")
+app.secret_key = os.getenv("SECRET_KEY", "")
 weatherApp = GetWeather()
 
 db = SQLAlchemy(app)
@@ -70,7 +71,7 @@ def saveWeatherDataToDB():
         )
         db.session.add(weatherToDB)
         db.session.commit()
-    return render_template("mainPage.html")
+    return render_template("dataSaved.html")
 
 
 @app.route("/todayWeather", methods=["POST", "GET"])

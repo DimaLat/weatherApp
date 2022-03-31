@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 from typing import Dict, List
 
@@ -8,7 +9,6 @@ from requests import Response
 from constants import (
     getWeatherEndpoint,
     GetWeatherApiMethods,
-    APP_ID,
     DEFAULT_EXCLUDE,
     DEFAULT_CITY,
     DAY_SECONDS,
@@ -20,6 +20,7 @@ from models import DailyWeatherResponse, WeatherInfo, PastDailyWeatherInfo
 class GetWeather:
     def __init__(self):
         self.endpoint: str = getWeatherEndpoint
+        self.appId: str = os.getenv("APP_ID", "")
 
     def callWeatherApi(self, method: str, params: Dict) -> Dict:
         """
@@ -42,7 +43,7 @@ class GetWeather:
         :longitude: float: lon coordinate
         :return: WeatherInfo: object of weather info
         """
-        params: Dict = {"lat": latitude, "lon": longitude, "appid": APP_ID}
+        params: Dict = {"lat": latitude, "lon": longitude, "appid": self.appId}
         response: Dict = self.callWeatherApi(GetWeatherApiMethods.current, params)
         weatherInfo: WeatherInfo = WeatherInfo(response)
         return weatherInfo
@@ -61,7 +62,7 @@ class GetWeather:
             "lat": latitude,
             "lon": longitude,
             "exclude": exclude,
-            "appid": APP_ID,
+            "appid": self.appId,
         }
         response: Dict = self.callWeatherApi(
             GetWeatherApiMethods.oneCall, params=params
@@ -79,7 +80,7 @@ class GetWeather:
         :requestedDays: int: for how many days were the request
         :return: List[PastDailyWeatherInfo]: list of weather info for past days
         """
-        params: Dict = {"lat": latitude, "lon": longitude, "appid": APP_ID}
+        params: Dict = {"lat": latitude, "lon": longitude, "appid": self.appId}
         dtList: List[int] = self.getListOfDateTimesForPastFiveDays()
         interval: int = 0
         responseWeather: List[PastDailyWeatherInfo] = []
