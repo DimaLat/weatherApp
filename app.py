@@ -12,7 +12,9 @@ from models import WeatherInfo
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("SQLALCHEMY_DATABASE_URI", "")
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = os.getenv("SQLALCHEMY_TRACK_MODIFICATIONS", "")
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = os.getenv(
+    "SQLALCHEMY_TRACK_MODIFICATIONS", False
+)
 app.secret_key = os.getenv("SECRET_KEY", "")
 weatherApp = GetWeather()
 
@@ -47,7 +49,6 @@ class WeatherToDb(db.Model):
 
 @app.route("/", methods=["GET"])
 def mainPage():
-
     return render_template("mainPage.html")
 
 
@@ -55,19 +56,13 @@ def mainPage():
 def saveWeatherDataToDB():
     if request.method == "POST":
         result = request.form
-        region = result.get("region")
-        startDate = result.get("startDate")
-        endDate = result.get("endDate")
-        averageTemperature = result.get("averageTemperature")
-        averagePressure = result.get("averagePressure")
-        averageHumidity = result.get("averageHumidity")
         weatherToDB = WeatherToDb(
-            region=region,
-            startDate=startDate,
-            endDate=endDate,
-            averageDaytimeTemperature=averageTemperature,
-            averagePressure=averagePressure,
-            averageHumidity=averageHumidity,
+            region=result.get("region", ""),
+            startDate=result.get("startDate"),
+            endDate=result.get("endDate"),
+            averageDaytimeTemperature=result.get("averageTemperature", 0),
+            averagePressure=result.get("averagePressure", 0),
+            averageHumidity=result.get("averageHumidity", 0),
         )
         db.session.add(weatherToDB)
         db.session.commit()
@@ -79,7 +74,7 @@ def todayWeather():
     cityName: str = DEFAULT_CITY
     if request.method == "POST":
         result = request.form
-        cityName = result.get("Name")
+        cityName = result.get("Name", "")
 
     geoLocation: Location = weatherApp.getGeoLocation(cityName=cityName)
     if not geoLocation:

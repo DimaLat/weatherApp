@@ -4,7 +4,11 @@ from unittest import mock
 import pytest as pytest
 from freezegun import freeze_time
 from getWeather import GetWeather
-from tests.mockData import API_RESPONSE_GET_CURRENT_WEATHER, API_RESPONSE_GET_DAILY_WEATHER
+from tests.mockData import (
+    API_RESPONSE_GET_CURRENT_WEATHER,
+    API_RESPONSE_GET_DAILY_WEATHER,
+    API_RESPONSE_GET_PAST_WEATHER,
+)
 
 
 class TestAPI(unittest.TestCase):
@@ -41,6 +45,18 @@ class TestAPI(unittest.TestCase):
             assert minTemp == -2.9
             assert maxTemp == 2.09
 
+    def testGetDailyPastWeather(self):
+        with mock.patch(
+            "getWeather.GetWeather.callWeatherApi",
+            return_value=API_RESPONSE_GET_PAST_WEATHER,
+        ):
+            weather = self.weatherApp.getWeatherFromPast(
+                longitude=30, latitude=55, requestedDays=1
+            )
+            assert len(weather) == 1
+            assert weather[0].humidity == 63
+            assert weather[0].temp == 273.56
+
     def testCallWeatherApiFailure(self):
         with pytest.raises(Exception):
             self.weatherApp.callWeatherApi("ewe", {})
@@ -57,7 +73,10 @@ class TestAPI(unittest.TestCase):
     def testGetGeolocation(self):
         # Test 1 correct city name
         geolocation = self.weatherApp.getGeoLocation("Braslaw")
-        assert geolocation.address == 'Браслав, Браславский район, Витебская область, Беларусь'
+        assert (
+            geolocation.address
+            == "Браслав, Браславский район, Витебская область, Беларусь"
+        )
         assert geolocation.latitude == 55.639469
         assert geolocation.longitude == 27.031643
 
@@ -65,3 +84,7 @@ class TestAPI(unittest.TestCase):
         geolocation = self.weatherApp.getGeoLocation("ggggggggggggggg")
         # if city name will be incorrect it will return None, and after that in routes it will redirect to notFound
         assert geolocation is None
+
+    def testTempToCelsius(self):
+        celsiusTemp = self.weatherApp.tempToCelsius(280)
+        assert celsiusTemp == 6.85
