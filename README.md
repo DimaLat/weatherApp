@@ -35,4 +35,4 @@ pay for the api to get unique app id to get access to paid content). Code also c
 4. provide SQLALCHEMY_DATABASE_URI (database uri), SECRET_KEY (app secret key), APP_ID (your app id, token to make requests to weather api) values in .env file
 5. run the project and enjoy the functionality :)
 
-### Writing this project took about ~18-20 hours for me (including api selection, writing code with comments and so on, writing tests, testing functionality, writing readme and etc.) Code is not ideally and should be improved, as everything could be improved in this world, but at the moment it makes entrusted to it tasks and the code is readable enough.
+### Writing this project took about ~18-20 hours for me (including api selection, writing code with comments and so on, writing tests, testing functionality, writing readme and etc.) Code is not ideal and should be improved, as everything could be improved in this world, but at the moment it makes entrusted to it tasks and the code is readable enough.
