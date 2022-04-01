@@ -79,10 +79,13 @@ def todayWeather():
     geoLocation: Location = weatherApp.getGeoLocation(cityName=cityName)
     if not geoLocation:
         return render_template("notFound.html")
-    weatherInfo: WeatherInfo = weatherApp.getCurrentWeather(
-        latitude=geoLocation.latitude,
-        longitude=geoLocation.longitude,
-    )
+    try:
+        weatherInfo: WeatherInfo = weatherApp.getCurrentWeather(
+            latitude=geoLocation.latitude,
+            longitude=geoLocation.longitude,
+        )
+    except Exception as exc:
+        return render_template("notFound.html", excText=exc)
     tempCelsius: float = weatherApp.tempToCelsius(weatherInfo.main.temp)
     weather_info: Dict = {
         "temperature": tempCelsius,
@@ -108,9 +111,12 @@ def dailyWeatherForecast():
     geoLocation: Location = weatherApp.getGeoLocation(cityName=cityName)
     if not geoLocation:
         return render_template("notFound.html")
-    weather = weatherApp.getDailyWeather(
-        latitude=geoLocation.latitude, longitude=geoLocation.longitude
-    )
+    try:
+        weather = weatherApp.getDailyWeather(
+            latitude=geoLocation.latitude, longitude=geoLocation.longitude
+        )
+    except Exception as exc:
+        return render_template("notFound.html", excText=exc)
     weatherByDayList: List = []
     interval: int = 0
     resultAvgTemp: float = 0  # average temperature of all selected days
@@ -172,11 +178,14 @@ def pastWeatherForecast():
     geoLocation: Location = weatherApp.getGeoLocation(cityName=cityName)
     if not geoLocation:
         return render_template("notFound.html")
-    weatherByDays = weatherApp.getWeatherFromPast(
-        latitude=geoLocation.latitude,
-        longitude=geoLocation.longitude,
-        requestedDays=daysInterval,
-    )
+    try:
+        weatherByDays = weatherApp.getWeatherFromPast(
+            latitude=geoLocation.latitude,
+            longitude=geoLocation.longitude,
+            requestedDays=daysInterval,
+        )
+    except Exception as exc:
+        return render_template("notFound.html", excText=exc)
     resultAvgTemp: float = 0  # average temperature of all selected days
     resultAvgPressure: float = 0  # average pressure of all selected days
     resultAvgHumidity: int = 0  # average humidity of all selected days
