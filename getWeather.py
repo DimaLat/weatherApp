@@ -25,7 +25,7 @@ class GetWeather:
     def callWeatherApi(self, method: str, params: Dict) -> Dict:
         """
         Performs a request to the weather api.
-        :method: str :
+        :method: str : method for api call
         :params: Dict: params for api call
         :return: Dict: json response
         """
